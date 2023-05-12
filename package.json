@@ -1,0 +1,23 @@
+{
+  "name": "s4f_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkateFastEatTrash/S4F_Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkateFastEatTrash/S4F_Project/issues"
+  },
+  "homepage": "https://github.com/SkateFastEatTrash/S4F_Project#readme",
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  }
+}
