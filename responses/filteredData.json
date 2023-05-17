@@ -1,0 +1,290 @@
+[
+    {
+        "time": [
+            "2023-05-17",
+            "00:00"
+        ],
+        "temperature": "9.3°C",
+        "rain": "0.4mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "8km/h",
+        "winddirection": "NE (36°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "01:00"
+        ],
+        "temperature": "9.1°C",
+        "rain": "0.1mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "7.9km/h",
+        "winddirection": "NE (30°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "02:00"
+        ],
+        "temperature": "9°C",
+        "rain": "0.1mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "10.2km/h",
+        "winddirection": "NE (42°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "03:00"
+        ],
+        "temperature": "8.7°C",
+        "rain": "0.1mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "12.1km/h",
+        "winddirection": "NE (23°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "04:00"
+        ],
+        "temperature": "8.4°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "13km/h",
+        "winddirection": "NE (24°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "05:00"
+        ],
+        "temperature": "8.2°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "14.3km/h",
+        "winddirection": "NE (39°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "06:00"
+        ],
+        "temperature": "8.4°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "17.6km/h",
+        "winddirection": "NE (46°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "07:00"
+        ],
+        "temperature": "8.7°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "15.3km/h",
+        "winddirection": "NE (56°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "08:00"
+        ],
+        "temperature": "9.7°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "18.4km/h",
+        "winddirection": "NE (48°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "09:00"
+        ],
+        "temperature": "10.4°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "19.5km/h",
+        "winddirection": "NE (51°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "10:00"
+        ],
+        "temperature": "11.2°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "19.9km/h",
+        "winddirection": "NE (49°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "11:00"
+        ],
+        "temperature": "11.3°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "23.2km/h",
+        "winddirection": "NE (54°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "12:00"
+        ],
+        "temperature": "11.9°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "22.2km/h",
+        "winddirection": "NE (54°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "13:00"
+        ],
+        "temperature": "11.9°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "18.7km/h",
+        "winddirection": "NE (52°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "14:00"
+        ],
+        "temperature": "12.2°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "19.3km/h",
+        "winddirection": "NE (57°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "15:00"
+        ],
+        "temperature": "12.4°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "19.3km/h",
+        "winddirection": "NE (61°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "16:00"
+        ],
+        "temperature": "12.4°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "17km/h",
+        "winddirection": "E (73°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "17:00"
+        ],
+        "temperature": "12°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "13km/h",
+        "winddirection": "E (92°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "18:00"
+        ],
+        "temperature": "11.8°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "11.8km/h",
+        "winddirection": "E (78°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "19:00"
+        ],
+        "temperature": "11.3°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "13.4km/h",
+        "winddirection": "E (95°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "20:00"
+        ],
+        "temperature": "10.8°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "10.1km/h",
+        "winddirection": "E (92°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "21:00"
+        ],
+        "temperature": "10.2°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "9.4km/h",
+        "winddirection": "E (92°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "22:00"
+        ],
+        "temperature": "9.7°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "7.9km/h",
+        "winddirection": "E (87°)"
+    },
+    {
+        "time": [
+            "2023-05-17",
+            "23:00"
+        ],
+        "temperature": "9.1°C",
+        "rain": "0mm",
+        "snowfall": "0mm",
+        "visibility": "24140m",
+        "windspeed": "5.8km/h",
+        "winddirection": "E (97°)"
+    }
+]
