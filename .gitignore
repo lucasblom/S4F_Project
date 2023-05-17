@@ -1,1 +1,10 @@
+# .gitignore
+# Node Modules
 node_modules
+
+# testing File
+/Backend/testing.js
+
+# API Responses
+/responses
+
