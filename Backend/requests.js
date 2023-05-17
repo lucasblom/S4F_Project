@@ -1,18 +1,19 @@
 import fetch from "node-fetch";
 import fs from "fs";
 
+
 var latitude = 0
 var longitude = 0
-const city = "Wetzwil"
+const city = "Wädenswil"
 const country = "CH"
 
 
-async function location() {
+export async function location() {
   const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${country}&appid=1d5099211a967e079092731876b2c1cc`);
   const jsonData = await response.json();
   latitude = jsonData[0].lat
   longitude = jsonData[0].lon
-  console.log(jsonData[0].name + " " + jsonData[0].country + "\n" + 'Latitude: ' + jsonData[0].lat + " \n" + 'Longitude: '+ jsonData[0].lon)
+  console.log(jsonData[0].name + " " + jsonData[0].country + "\n" + 'Latitude: ' + jsonData[0].lat + " \n" + 'Longitude: '+ jsonData[0].lon + '\n')
   logJSONData()
 }
 
@@ -20,6 +21,7 @@ async function logJSONData() {
   const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,rain,snowfall,visibility,windspeed_10m,winddirection_10m`);
   const jsonData = await response.json();
   let weatherData = []
+  let fileLocation = "responses/weatherData.json"
 
   for (let i = 0; i in jsonData.hourly.time; i++) {
     let list = {}
@@ -33,13 +35,14 @@ async function logJSONData() {
     weatherData.push(list)
   }
 
-  fs.writeFile("weatherData.json", JSON.stringify(weatherData), (err) => {
+  fs.writeFile(fileLocation, JSON.stringify(weatherData), (err) => {
     if (err) {
       console.log(err);
     } else {
-      console.log("File written successfully\n");
+      console.log(`File written successfully\tFile: ..${fileLocation}`);
     }
   })
+  filterByDate(currentDate(), jsonData)
 }
 
 function caridnalDirection(degrees) {
@@ -62,4 +65,49 @@ function convertTime(time) {
   date = time.split("T")
   return date
 }
+
+function filterData(data){
+  console.log(data[0])
+}
+
+function filterByDate (date, data) {
+  let filteredData = []
+  let fileLocation = "responses/filteredData.json"
+  for (let i = 0; i in data.hourly.time; i++) {
+    if (convertTime(data.hourly.time[i])[0] == date) {
+      let lst = {}
+      lst["time"] = convertTime(data.hourly.time[i])
+      lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
+      lst["rain"] = data.hourly.rain[i] + "mm"
+      lst["snowfall"] = data.hourly.snowfall[i] + "mm"
+      lst["visibility"] = data.hourly.visibility[i] + "m"
+      lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
+      lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
+      filteredData.push(lst)
+    }
+  }
+  fs.writeFile(fileLocation, JSON.stringify(filteredData), (err) => {
+    if (err) {
+      console.log('Error:\n' + err);
+    } else {
+      console.log(`File written successfully\tFile: ..${fileLocation}`);
+    }
+  })
+}
+
+function currentDate () {
+  let date = new Date()
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  if (day < 10) {
+    day = "0" + day
+  }
+  if (month < 10){
+    month = "0" + month
+  }
+  let currentDate = year + "-" + month + "-" + day
+  return currentDate
+}
+
 location()
