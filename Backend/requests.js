@@ -1,9 +1,12 @@
 import fetch from "node-fetch";
 import fs from "fs";
+import { parse } from "path";
+import { stringify } from "querystring";
 
 
 var latitude = 0
 var longitude = 0
+var hour = 0
 const city = "Wädenswil"
 const country = "CH"
 
@@ -18,7 +21,7 @@ export async function location() {
 }
 
 async function logJSONData() {
-  const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,rain,snowfall,visibility,windspeed_10m,winddirection_10m`);
+  const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
   const jsonData = await response.json();
   let weatherData = []
   let fileLocation = "responses/weatherData.json"
@@ -29,6 +32,7 @@ async function logJSONData() {
     list["temperature"] = jsonData.hourly.temperature_2m[i] + "°C"
     list["rain"] = jsonData.hourly.rain[i] + "mm"
     list["snowfall"] = jsonData.hourly.snowfall[i] + "mm"
+    list["precipitation_probability"] = jsonData.hourly.precipitation_probability[i] + "%"
     list["visibility"] = jsonData.hourly.visibility[i] + "m"
     list["windspeed"] = jsonData.hourly.windspeed_10m[i] + "km/h"
     list["winddirection"] = caridnalDirection(jsonData.hourly.winddirection_10m[i]) + " (" + jsonData.hourly.winddirection_10m[i] + "°)"
@@ -66,26 +70,45 @@ function convertTime(time) {
   return date
 }
 
-function filterData(data){
-  console.log(data[0])
-}
+
 
 function filterByDate (date, data) {
   let filteredData = []
   let fileLocation = "responses/filteredData.json"
   for (let i = 0; i in data.hourly.time; i++) {
-    if (convertTime(data.hourly.time[i])[0] == date) {
+    if (convertTime(data.hourly.time[i])[0] == date && parseInt(convertTime(data.hourly.time[i])[1].split(":")[0]) >= hour ) {
       let lst = {}
       lst["time"] = convertTime(data.hourly.time[i])
       lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
       lst["rain"] = data.hourly.rain[i] + "mm"
       lst["snowfall"] = data.hourly.snowfall[i] + "mm"
+      lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
       lst["visibility"] = data.hourly.visibility[i] + "m"
       lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
       lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
       filteredData.push(lst)
     }
   }
+  if (filteredData.length < 24) {
+    for (let i = 0; i in data.hourly.time; i++) {
+      if (convertTime(data.hourly.time[i])[0] == tomorrow()) {
+        let lst = {}
+        lst["time"] = convertTime(data.hourly.time[i])
+        lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
+        lst["rain"] = data.hourly.rain[i] + "mm"
+        lst["snowfall"] = data.hourly.snowfall[i] + "mm"
+        lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
+        lst["visibility"] = data.hourly.visibility[i] + "m"
+        lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
+        lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
+        filteredData.push(lst)
+      }
+    }
+  }
+
+
+
+
   fs.writeFile(fileLocation, JSON.stringify(filteredData), (err) => {
     if (err) {
       console.log('Error:\n' + err);
@@ -97,7 +120,22 @@ function filterByDate (date, data) {
 
 function currentDate () {
   let date = new Date()
+  hour = date.getHours()
   let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  if (day < 10) {
+    day = "0" + day
+  }
+  if (month < 10){
+    month = "0" + month
+  }
+  let currentDate = year + "-" + month + "-" + day
+  return currentDate
+}
+function tomorrow(){
+  let date = new Date()
+  let day = date.getDate() + 1
   let month = date.getMonth() + 1
   let year = date.getFullYear()
   if (day < 10) {
