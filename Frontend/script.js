@@ -4,8 +4,8 @@
 import { countryList } from '../Backend/country.js';
 
 // Defining some variables
-var latitude;
-var longitude;
+var latitude = 0
+var longitude = 0
 
 // ! DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         console.log("Form submitted");
         console.log(getInformationFromFrom());
+
         location(getInformationFromFrom()[0], getInformationFromFrom()[2])
+        logJSONData(latitude, longitude)
         document.querySelector("form").style = "width: 80%; transition: 0.5s;"
     })
 })
@@ -33,32 +35,16 @@ function getInformationFromFrom() {
 // Takes in the city and country code and returns the latitude and longitude of the location
 async function location(city, country_code) {
     const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=1d5099211a967e079092731876b2c1cc`);
-    const jsonData = await response.json();
-    latitude = jsonData[0].lat
-    longitude = jsonData[0].lon
-    console.log(jsonData[0].name + " " + jsonData[0].country + "\n" + 'Latitude: ' + jsonData[0].lat + " \n" + 'Longitude: ' + jsonData[0].lon + '\n')
-    logJSONData(latitude, longitude)
+    const locationData = await response.json();
+    latitude = locationData[0].lat
+    longitude = locationData[0].lon
+    console.log(locationData[0].name + " " + locationData[0].country + "\n" + 'Latitude: ' + locationData[0].lat + " \n" + 'Longitude: ' + locationData[0].lon + '\n')
 }
 
 // Takes in the latitude and longitude and logs the weather data
 async function logJSONData(latitude, longitude) {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
     const jsonData = await response.json();
-    var weatherData = []
-
-    // loops through the JSON data and adds it to the weatherData array
-    for (let i = 0; i in jsonData.hourly.time; i++) {
-        let list = {}
-        list["time"] = convertTime(jsonData.hourly.time[i])
-        list["temperature"] = jsonData.hourly.temperature_2m[i] + "°C"
-        list["rain"] = jsonData.hourly.rain[i] + "mm"
-        list["snowfall"] = jsonData.hourly.snowfall[i] + "mm"
-        list["precipitation_probability"] = jsonData.hourly.precipitation_probability[i] + "%"
-        list["visibility"] = jsonData.hourly.visibility[i] + "m"
-        list["windspeed"] = jsonData.hourly.windspeed_10m[i] + "km/h"
-        list["winddirection"] = caridnalDirection(jsonData.hourly.winddirection_10m[i]) + " (" + jsonData.hourly.winddirection_10m[i] + "°)"
-        weatherData.push(list)
-    }
     // refers to the function 'filterByDate' and passes the current date and the weatherData array
     filterByDate(currentDate(), jsonData)
 }
@@ -100,7 +86,7 @@ function currentDate() {
     if (month < 10) {
         month = "0" + month
     }
-    let currentDate = year + "-" + month + "-" + day 
+    let currentDate = year + "-" + month + "-" + day
     return currentDate
 }
 
@@ -115,12 +101,12 @@ function tomorrow() {
     if (tmrwmonth < 10) {
         tmrwmonth = "0" + tmrwmonth
     }
-    let tomorrowDate = tmrwyear + "-" + tmrwmonth + "-" + tmrwday 
+    let tomorrowDate = tmrwyear + "-" + tmrwmonth + "-" + tmrwday
     return tomorrowDate
 }
 
 // takes in the date and weatherData array and logs the weather data for that date
-export function filterByDate(date, data) {
+function filterByDate(date, data) {
     let filteredData = []
     for (let i = 0; i in data.hourly.time; i++) {
         if (convertTime(data.hourly.time[i])[0] == date && parseInt(convertTime(data.hourly.time[i])[1].split(":")[0]) >= new Date().getHours()) {
@@ -137,56 +123,69 @@ export function filterByDate(date, data) {
             // adds lst to the filteredData array
             filteredData.push(lst)
 
-    }
-}
-if (filteredData.length < 24) {
-    for (let i = 0; i in data.hourly.time; i++) {
-        if (convertTime(data.hourly.time[i])[0] == tomorrow()) {
-            let lst = {}
-            lst["time"] = convertTime(data.hourly.time[i])
-            lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
-            lst["rain"] = data.hourly.rain[i] + "mm"
-            lst["snowfall"] = data.hourly.snowfall[i] + "mm"
-            lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
-            lst["visibility"] = data.hourly.visibility[i] + "m"
-            lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
-            lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
-            // adds lst to the filteredData array
-            filteredData.push(lst)
         }
     }
-}
-if (filteredData.length > 24) {
-    // if (filteredData.length > 24) remove extra data
-    filteredData.pop()[24,-1] 
-    console.log(filteredData.length)
-  }
-    // loops through the filteredData array and logs the weather data
-/*
-    for (let i=0; i in filteredData; i++) {
-      console.log(  filteredData[i].time[0] + " " + filteredData[i].time[1] + "\n" + 
-                    filteredData[i].temperature + "\n" + 
-                    filteredData[i].rain + "\n" + 
-                    filteredData[i].snowfall + "\n" + 
-                    filteredData[i].visibility + "\n" + 
-                    filteredData[i].windspeed + "\n" + 
-                    filteredData[i].winddirection + "\n")
+    if (filteredData.length < 24) {
+        for (let i = 0; i in data.hourly.time; i++) {
+            if (convertTime(data.hourly.time[i])[0] == tomorrow()) {
+                let lst = {}
+                lst["time"] = convertTime(data.hourly.time[i])
+                lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
+                lst["rain"] = data.hourly.rain[i] + "mm"
+                lst["snowfall"] = data.hourly.snowfall[i] + "mm"
+                lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
+                lst["visibility"] = data.hourly.visibility[i] + "m"
+                lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
+                lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
+                // adds lst to the filteredData array
+                filteredData.push(lst)
+            }
+        }
     }
-*/
-    for (let i=0; i <= 24; i++) {
-        const showWeather = document.createElement("div")
-        showWeather.className = "weather"
-        showWeather.innerHTML = `
-        <h3 class="time">${filteredData[i].time[1]}</h3>
-        <h3 class="temp">Temprature: ${filteredData[i].temperature}</h3>
-        <h3 class="rain">Rain: ${filteredData[i].rain}</h3>
-        <h3 class="snow">Snowfall: ${filteredData[i].snowfall}</h3>
-        <h3 class="vis">Visibility: ${filteredData[i].visibility}</h3>
-        <h3 class="prbRain">Percipitation: ${filteredData[i].precipitation_probability}</h3>
-        <h3 class="wind">Wind Speed: ${filteredData[i].windspeed}</h3>
-        <h3 class="windDir">Winddirection: ${filteredData[i].winddirection}</h3>
-        `
-        document.getElementById("scroll").appendChild(showWeather)
+    if (filteredData.length > 24) {
+        // if (filteredData.length > 24) remove extra data
+        filteredData.pop()[24, -1]
+        console.log(filteredData.length)
     }
+    // return filteredData
+    displaysFiltered(filteredData)
 }
 
+function displaysFiltered (filteredData) {
+
+    // loops through the filteredData array and displays the data on the website
+    for (let i = 0; i <= 23; i++) {
+        const showWeather = document.createElement("div");
+        showWeather.className = "weather";
+        showWeather.innerHTML = `
+              <h3 class="time">${filteredData[i].time[1]}</h3>
+              <h3 class="temp">Temprature: ${filteredData[i].temperature}</h3>
+              <h3 class="rain">Rain: ${filteredData[i].rain}</h3>
+              <h3 class="snow">Snowfall: ${filteredData[i].snowfall}</h3>
+              <h3 class="vis">Visibility: ${filteredData[i].visibility}</h3>
+              <h3 class="prbRain">Percipitation: ${filteredData[i].precipitation_probability}</h3>
+              <h3 class="wind">Wind Speed: ${filteredData[i].windspeed}</h3>
+              <h3 class="windDir">Winddirection: ${filteredData[i].winddirection}</h3>
+            `;
+        // Displays the weather data on the website with animation and delay
+        document.getElementById("hourly").appendChild(showWeather);
+    }
+
+    // Creats a delay for the animation -> cards come in from left one after the other (see css for animation)
+    for (let i = 0; i <= 23; i++) {
+        setTimeout(() => {
+            document.getElementsByClassName("weather")[i].style = "opacity: 1; margin-top: 0vh;"
+        }, 200 * i);
+    }
+    document.getElementById("location").style = "display: flex; justify-content: center; align-items: center;"
+    document.getElementById("location").innerHTML = getInformationFromFrom()[0] + ", " +
+        getInformationFromFrom()[1] + " (" +
+        getInformationFromFrom()[2] + ")"
+    
+}
+
+// takes complete weather data, filteres by date and returns the averages for that date
+function filterByDateAverage(data) {
+
+}
+ 
