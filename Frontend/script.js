@@ -4,8 +4,8 @@
 import { countryList } from '../Backend/country.js';
 
 // Defining some variables
-var latitude = 0
-var longitude = 0
+let latitude = 0
+let longitude = 0
 
 // ! DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('submit', function (event) {
         event.preventDefault();
         console.log("Form submitted");
-        console.log(getInformationFromFrom());
 
         location(getInformationFromFrom()[0], getInformationFromFrom()[2])
+    
         logJSONData(latitude, longitude)
         document.querySelector("form").style = "width: 80%; transition: 0.5s;"
     })
@@ -45,8 +45,9 @@ async function location(city, country_code) {
 async function logJSONData(latitude, longitude) {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
     const jsonData = await response.json();
-    // refers to the function 'filterByDate' and passes the current date and the weatherData array
+    // return jsonData
     filterByDate(currentDate(), jsonData)
+    weekly(jsonData)
 }
 
 
@@ -145,13 +146,18 @@ function filterByDate(date, data) {
     if (filteredData.length > 24) {
         // if (filteredData.length > 24) remove extra data
         filteredData.pop()[24, -1]
-        console.log(filteredData.length)
     }
     // return filteredData
     displaysFiltered(filteredData)
 }
 
 function displaysFiltered (filteredData) {
+
+    const hourlyContainer = document.getElementById("hourly");
+      // Remove any existing weather data
+    while (hourlyContainer.firstChild) {
+        hourlyContainer.removeChild(hourlyContainer.firstChild);
+    }
 
     // loops through the filteredData array and displays the data on the website
     for (let i = 0; i <= 23; i++) {
@@ -179,13 +185,107 @@ function displaysFiltered (filteredData) {
     }
     document.getElementById("location").style = "display: flex; justify-content: center; align-items: center;"
     document.getElementById("location").innerHTML = getInformationFromFrom()[0] + ", " +
-        getInformationFromFrom()[1] + " (" +
-        getInformationFromFrom()[2] + ")"
+                                                    getInformationFromFrom()[1] + " (" +
+                                                    getInformationFromFrom()[2] + ")"
     
 }
 
 // takes complete weather data, filteres by date and returns the averages for that date
-function filterByDateAverage(data) {
+function weekly (data) {
+    
+    const weeklyContainer = document.getElementById("weekly");
+        // Remove any existing weather data
+      while (weeklyContainer.firstChild) {
+        weeklyContainer.removeChild(weeklyContainer.firstChild);
+      }
+  
+    
+    for (let i=0; i < 7; i++) {
+        let weeklyData = []
+        let day = currentDate().split("-")[2]
+        day = parseInt(day) + i
+        if (day < 10) {
+            day = "0" + day
+        }
+        let date = currentDate().split("-")[0] + "-" + currentDate().split("-")[1] + "-" + day 
+
+        for (let j=0; j < data.hourly.time.length; j++) {
+            if (convertTime(data.hourly.time[j])[0] == date) {
+                let lst = {}
+                lst["time"] = convertTime(data.hourly.time[j][0])
+                lst["temperature"] = data.hourly.temperature_2m[j]
+                lst["rain"] = data.hourly.rain[j]
+                lst["snowfall"] = data.hourly.snowfall[j]
+                lst["precipitation_probability"] = data.hourly.precipitation_probability[j]
+                lst["visibility"] = data.hourly.visibility[j]
+                lst["windspeed"] = data.hourly.windspeed_10m[j]
+                lst["winddirection"] = data.hourly.winddirection_10m[j]
+                weeklyData.push(lst)
+            }
+        }
+        displayWeekly(weeklyData)
+    }
+    
+}
+
+function displayWeekly (weeklyData) {
+    let agvData = []
+    let temp = 0
+    let rain = 0
+    let snowfall = 0
+    let precipitation_probability = 0
+    let visibility = 0
+    let windspeed = 0
+    let winddirection = 0
+
+      // Remove any existing weather data
+
+    // Loops through weeklyData and returns the averages for each day
+    for (let i=0; i < weeklyData.length; i++) {
+        let lst = {}
+        temp += (weeklyData[i].temperature)
+        rain += (weeklyData[i].rain)
+        snowfall += (weeklyData[i].snowfall)
+        precipitation_probability += (weeklyData[i].precipitation_probability)
+        visibility += (weeklyData[i].visibility)
+        windspeed += (weeklyData[i].windspeed)
+        winddirection += (weeklyData[i].winddirection)
+    }
+    temp = temp / weeklyData.length
+    rain = rain / weeklyData.length
+    snowfall = snowfall / weeklyData.length
+    precipitation_probability = precipitation_probability / weeklyData.length
+    visibility = visibility / weeklyData.length
+    windspeed = windspeed / weeklyData.length
+    winddirection = winddirection / weeklyData.length
+
+    agvData.push({
+        "temprature": temp.toFixed(1),
+        "rain":  rain.toFixed(1), 
+        "snowfall": snowfall.toFixed(1),
+        "precipitation":  precipitation_probability.toFixed(1), 
+        "visibility": visibility.toFixed(1), 
+        "windspeed": windspeed.toFixed(1),
+        "winddirection": winddirection.toFixed(1)})
+
+    // loops through the filteredData array and displays the data on the website
+        const showWeather = document.createElement("div");
+        showWeather.className = "column";
+        showWeather.innerHTML = `
+              <h3 class="temp">Temprature: ${agvData[0].temprature}</h3>
+              <h3 class="rain">Rain: ${agvData[0].rain}</h3>
+              <h3 class="snow">Snowfall: ${agvData[0].snowfall}</h3>
+              <h3 class="vis">Visibility: ${agvData[0].visibility}</h3>
+              <h3 class="prbRain">Percipitation: ${agvData[0].precipitation}</h3>
+              <h3 class="wind">Wind Speed: ${agvData[0].windspeed}</h3>
+                <h3 class="windDir">Winddirection: ${caridnalDirection(agvData[0].winddirection)}(${agvData[0].winddirection})</h3>
+            `;
+        // Displays the weather data on the website with animation and delay
+        document.getElementById("weekly").appendChild(showWeather);
+    
+    
+
+    // Creats a delay for the animation -> cards come in from left one after the other (see css for animation)
 
 }
  
