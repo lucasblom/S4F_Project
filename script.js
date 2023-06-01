@@ -14,41 +14,55 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Form submitted");
 
         location(getInformationFromFrom()[0], getInformationFromFrom()[2])
-    
+
         document.querySelector("form").style = "width: 40%; transition: 0.5s;"
     })
 })
 
 
 // ! Functions
-function setFavIcon () {
+function setFavIcon() {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (prefersDarkMode) {
-        let  link =
+        let link =
             document.querySelector("link[rel*='icon']");
-            document.createElement("link");
-            link.type = "image/svg+xml";
-            link.rel = "icon";
-            link.href = "../pictures/Yoda.jpg";
+        document.createElement("link");
+        link.type = "image/svg+xml";
+        link.rel = "icon";
+        link.href = "../pictures/Yoda.jpg";
         document.head.appendChild(link);
         document.body.style.backgroundColor = "#597684";
     } else {
-        let  link =
+        let link =
             document.querySelector("link[rel*='icon']");
-            document.createElement("link");
-            link.type = "image/svg+xml";
-            link.rel = "icon";
-            link.href = "../pictures/Fav-Icon-Dark.svg";
+        document.createElement("link");
+        link.type = "image/svg+xml";
+        link.rel = "icon";
+        link.href = "../pictures/Fav-Icon-Dark.svg";
         document.head.appendChild(link);
     }
+}
+
+function horizontalScroll() {
+    document.addEventListener('scroll', () => {
+
+    })
 }
 // Takes in information given from HTML from and returns an array with the city, country and country code
 // src: /Frontend/index.html
 function getInformationFromFrom() {
     const city = document.getElementById("city").value;
     const country = document.getElementById("country").value;
-    const country_code = countryList[country];
+    if (city === "" || country === "") {
+        alert("Please fill in the form");
+        return;
+    }
+    if (countryList[country.toLowerCase()] === undefined) {
+        alert("Please enter a valid country");
+        return;
+    }
+    const country_code = countryList[country.toLowerCase()];
     return [city, country, country_code];
 }
 
@@ -118,18 +132,18 @@ function tomorrow() {
     let tmrwmonth = tmrw.getMonth() + 1
     let tmrwyear = tmrw.getFullYear()
 
-    if (tmrwday > 31 && tmrwmonth == 1) {tmrwday = 1; tmrwmonth = 2}
-    if (tmrwday > 28 && tmrwmonth == 2) {tmrwday = 1; tmrwmonth = 3}
-    if (tmrwday > 31 && tmrwmonth == 3) {tmrwday = 1; tmrwmonth = 4}
-    if (tmrwday > 30 && tmrwmonth == 4) {tmrwday = 1; tmrwmonth = 5}
-    if (tmrwday > 31 && tmrwmonth == 5) {tmrwday = 1; tmrwmonth = 6}
-    if (tmrwday > 30 && tmrwmonth == 6) {tmrwday = 1; tmrwmonth = 7}
-    if (tmrwday > 31 && tmrwmonth == 7) {tmrwday = 1; tmrwmonth = 8}
-    if (tmrwday > 31 && tmrwmonth == 8) {tmrwday = 1; tmrwmonth = 9}
-    if (tmrwday > 30 && tmrwmonth == 9) {tmrwday = 1; tmrwmonth = 10}
-    if (tmrwday > 31 && tmrwmonth == 10) {tmrwday = 1; tmrwmonth = 11}
-    if (tmrwday > 30 && tmrwmonth == 11) {tmrwday = 1; tmrwmonth = 12}
-    if (tmrwday > 31 && tmrwmonth == 12) {tmrwday = 1; tmrwmonth = 1; tmrwyear++}
+    if (tmrwday > 31 && tmrwmonth == 1) { tmrwday = 1; tmrwmonth = 2 }
+    if (tmrwday > 28 && tmrwmonth == 2) { tmrwday = 1; tmrwmonth = 3 }
+    if (tmrwday > 31 && tmrwmonth == 3) { tmrwday = 1; tmrwmonth = 4 }
+    if (tmrwday > 30 && tmrwmonth == 4) { tmrwday = 1; tmrwmonth = 5 }
+    if (tmrwday > 31 && tmrwmonth == 5) { tmrwday = 1; tmrwmonth = 6 }
+    if (tmrwday > 30 && tmrwmonth == 6) { tmrwday = 1; tmrwmonth = 7 }
+    if (tmrwday > 31 && tmrwmonth == 7) { tmrwday = 1; tmrwmonth = 8 }
+    if (tmrwday > 31 && tmrwmonth == 8) { tmrwday = 1; tmrwmonth = 9 }
+    if (tmrwday > 30 && tmrwmonth == 9) { tmrwday = 1; tmrwmonth = 10 }
+    if (tmrwday > 31 && tmrwmonth == 10) { tmrwday = 1; tmrwmonth = 11 }
+    if (tmrwday > 30 && tmrwmonth == 11) { tmrwday = 1; tmrwmonth = 12 }
+    if (tmrwday > 31 && tmrwmonth == 12) { tmrwday = 1; tmrwmonth = 1; tmrwyear++ }
 
     if (tmrwday < 10) {
         tmrwday = "0" + tmrwday
@@ -188,16 +202,16 @@ function filterByDate(date, data) {
     displaysFiltered(filteredData)
 }
 
-function displaysFiltered (filteredData) {
+function displaysFiltered(filteredData) {
 
     const hourlyContainer = document.getElementById("hourly");
-      // Remove any existing weather data
+    // Remove any existing weather data
     while (hourlyContainer.firstChild) {
         hourlyContainer.removeChild(hourlyContainer.firstChild);
     }
 
     // loops through the filteredData array and displays the data on the website
- 
+
     for (let i = 0; i <= 23; i++) {
         const showWeather = document.createElement("div");
         showWeather.className = "weather";
@@ -223,23 +237,23 @@ function displaysFiltered (filteredData) {
     }
     document.getElementById("location").style = "display: flex; justify-content: center; align-items: center;"
     document.getElementById("location").innerHTML = getInformationFromFrom()[0] + ", " +
-                                                    getInformationFromFrom()[1] + " (" +
-                                                    getInformationFromFrom()[2] + ")"
-    
+        getInformationFromFrom()[1] + " (" +
+        getInformationFromFrom()[2] + ")"
+
 }
 
 // takes complete weather data, filteres by date and returns the averages for that date
-function weekly (data) {
-    
+function weekly(data) {
+
     const weeklyContainer = document.getElementById("weekly");
-        // Remove any existing weather data
-        // while True: removeChild.firstChild
-      while (weeklyContainer.firstChild) {
+    // Remove any existing weather data
+    // while True: removeChild.firstChild
+    while (weeklyContainer.firstChild) {
         weeklyContainer.removeChild(weeklyContainer.firstChild);
-      }
-  
-    
-    for (let i=0; i < 7; i++) {
+    }
+
+
+    for (let i = 0; i < 7; i++) {
         let weeklyData = []
         let day = currentDate().split("-")[2]
         let month = currentDate().split("-")[1]
@@ -247,18 +261,18 @@ function weekly (data) {
         day = parseInt(day) + i
         month = parseInt(month)
         year = parseInt(year)
-        if (day > 31 && month == 1) {day = i; month = 2}
-        if (day > 28 && month == 2) {day = i; month = 3}
-        if (day > 31 && month == 3) {day = i; month = 4}
-        if (day > 30 && month == 4) {day = i; month = 5}
-        if (day > 31 && month == 5) {day = i; month = 6}
-        if (day > 30 && month == 6) {day = i; month = 7}
-        if (day > 31 && month == 7) {day = i; month = 8}
-        if (day > 31 && month == 8) {day = i; month = 9}
-        if (day > 30 && month == 9) {day = i; month = 10}
-        if (day > 31 && month == 10) {day = i; month = 11}
-        if (day > 30 && month == 11) {day = i; month = 12}
-        if (day > 31 && month == 12) {day = i; month = 1; year++}
+        if (day > 31 && month == 1) { day = i; month = 2 }
+        if (day > 28 && month == 2) { day = i; month = 3 }
+        if (day > 31 && month == 3) { day = i; month = 4 }
+        if (day > 30 && month == 4) { day = i; month = 5 }
+        if (day > 31 && month == 5) { day = i; month = 6 }
+        if (day > 30 && month == 6) { day = i; month = 7 }
+        if (day > 31 && month == 7) { day = i; month = 8 }
+        if (day > 31 && month == 8) { day = i; month = 9 }
+        if (day > 30 && month == 9) { day = i; month = 10 }
+        if (day > 31 && month == 10) { day = i; month = 11 }
+        if (day > 30 && month == 11) { day = i; month = 12 }
+        if (day > 31 && month == 12) { day = i; month = 1; year++ }
 
         if (day < 10) {
             day = "0" + day
@@ -268,7 +282,7 @@ function weekly (data) {
         }
         let date = year + "-" + month + "-" + day
 
-        for (let j=0; j < data.hourly.time.length; j++) {
+        for (let j = 0; j < data.hourly.time.length; j++) {
             if (convertTime(data.hourly.time[j])[0] == date) {
                 let lst = {}
                 lst["temperature"] = data.hourly.temperature_2m[j]
@@ -283,10 +297,10 @@ function weekly (data) {
         }
         displayWeekly(weeklyData)
     }
-    
+
 }
 
-function displayWeekly (weeklyData) {
+function displayWeekly(weeklyData) {
     let agvData = []
     let temp = 0
     let rain = 0
@@ -297,7 +311,7 @@ function displayWeekly (weeklyData) {
     let winddirection = 0
 
     // Loops through weeklyData and returns the averages for each day
-    for (let i=0; i < weeklyData.length; i++) {
+    for (let i = 0; i < weeklyData.length; i++) {
         let lst = {}
         temp += (weeklyData[i].temperature)
         rain += (weeklyData[i].rain)
@@ -318,17 +332,18 @@ function displayWeekly (weeklyData) {
 
     agvData.push({
         "temprature": temp.toFixed(1),
-        "rain":  rain.toFixed(1), 
+        "rain": rain.toFixed(1),
         "snowfall": snowfall.toFixed(1),
-        "precipitation":  precipitation_probability.toFixed(1), 
-        "visibility": visibility.toFixed(1), 
+        "precipitation": precipitation_probability.toFixed(1),
+        "visibility": visibility.toFixed(1),
         "windspeed": windspeed.toFixed(1),
-        "winddirection": winddirection.toFixed(1)})
+        "winddirection": winddirection.toFixed(1)
+    })
 
     // loops through the filteredData array and displays the data on the website
-        const showWeather = document.createElement("div");
-        showWeather.className = "column";
-        showWeather.innerHTML = `
+    const showWeather = document.createElement("div");
+    showWeather.className = "column";
+    showWeather.innerHTML = `
               <h3 class="temp">Temprature: ${agvData[0].temprature}</h3>
               <h3 class="rain">Rain: ${agvData[0].rain}</h3>
               <h3 class="snow">Snowfall: ${agvData[0].snowfall}</h3>
@@ -337,7 +352,6 @@ function displayWeekly (weeklyData) {
               <h3 class="wind">Wind Speed: ${agvData[0].windspeed}</h3>
                 <h3 class="windDir">Winddirection: ${caridnalDirection(agvData[0].winddirection)}(${agvData[0].winddirection})</h3>
             `;
-        // Displays the weather data on the website with animation and delay
-        document.getElementById("weekly").appendChild(showWeather);
+    // Displays the weather data on the website with animation and delay
+    document.getElementById("weekly").appendChild(showWeather);
 }
- 
