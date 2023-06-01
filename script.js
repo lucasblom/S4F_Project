@@ -68,7 +68,7 @@ function getInformationFromFrom() {
 
 // Takes in the city and country code and returns the latitude and longitude of the location
 async function location(city, country_code) {
-    const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=1d5099211a967e079092731876b2c1cc`);
+    const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=1d5099211a967e079092731876b2c1cc`);
     const locationData = await response.json();
     const latitude = locationData[0].lat
     const longitude = locationData[0].lon
