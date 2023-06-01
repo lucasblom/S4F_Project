@@ -30,7 +30,7 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        link.href = "../pictures/Yoda.jpg";
+        link.href = "/S4F_Project/pictures/Yoda.jpg";
         document.head.appendChild(link);
         document.body.style.backgroundColor = "#597684";
     } else {
@@ -39,7 +39,7 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        link.href = "../pictures/Fav-Icon-Dark.svg";
+        link.href = "/S4F_Project/pictures/Fav-Icon-Dark.svg";
         document.head.appendChild(link);
     }
 }
