@@ -1,7 +1,7 @@
 // * Note: For better readability, consider using the 'Better Comments" extension for VS Code *
 
 // ! Imports
-import { countryList } from '/Backend/country.js';
+import { countryList } from '/S4F_Project/Backend/country.js';
 
 // Defining some variables
 
