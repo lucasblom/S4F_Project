@@ -6,8 +6,4 @@ node_modules
 /Backend/testing.js
 
 # API Responses
-/responses/filterData.json
-/responses/weatherData.json
-
-
-
+responses
