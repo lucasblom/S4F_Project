@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/SkateFastEatTrash/S4F_Project/issues"
   },
-  "homepage": "https://github.com/SkateFastEatTrash/S4F_Project#readme",
+  "homepage": "https://github.com/SkateFastEatTrash/S4F_Project/index.hmlt",
   "dependencies": {
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.1"
