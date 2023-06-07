@@ -77,8 +77,9 @@ async function location(city, country_code) {
 }
 
 // Takes in the latitude and longitude and logs the weather data
+// https://api.open-meteo.com/v1/forecast?latitude=47.2278988&longitude=8.6701365&hourly=temperature_2m,apparent_temperature,cloudcover,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m
 async function logJSONData(latitude, longitude) {
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
+    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,apparent_temperature,cloudcover,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
     const jsonData = await response.json();
     // return jsonData
     filterByDate(currentDate(), jsonData)
@@ -164,6 +165,8 @@ function filterByDate(date, data) {
             let lst = {}
             lst["time"] = convertTime(data.hourly.time[i])
             lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
+            lst["apparent_temperature"] = data.hourly.apparent_temperature[i] + "°C"
+            lst["cloudcover"] = data.hourly.cloudcover[i] + "%"
             lst["rain"] = data.hourly.rain[i] + "mm"
             lst["snowfall"] = data.hourly.snowfall[i] + "mm"
             lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
@@ -182,6 +185,8 @@ function filterByDate(date, data) {
                 let lst = {}
                 lst["time"] = convertTime(data.hourly.time[i])
                 lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
+                lst["apparent_temperature"] = data.hourly.apparent_temperature[i] + "°C"
+                lst["cloudcover"] = data.hourly.cloudcover[i] + "%"
                 lst["rain"] = data.hourly.rain[i] + "mm"
                 lst["snowfall"] = data.hourly.snowfall[i] + "mm"
                 lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
@@ -217,7 +222,9 @@ function displaysFiltered(filteredData) {
         showWeather.className = "weather";
         showWeather.innerHTML = `
               <h3 class="time">${filteredData[i].time[1]}</h3>
-              <h3 class="temp">Temprature: ${filteredData[i].temperature}</h3>
+              <h3 class="temp"> ${filteredData[i].temperature}</h3>
+              <h3 class="appTemp">Feels like: ${filteredData[i].apparent_temperature}</h3>
+              <h3 class="cloud">Cloudcover: ${filteredData[i].cloudcover}</h3>
               <h3 class="rain">Rain: ${filteredData[i].rain}</h3>
               <h3 class="snow">Snowfall: ${filteredData[i].snowfall}</h3>
               <h3 class="vis">Visibility: ${filteredData[i].visibility}</h3>
@@ -227,6 +234,7 @@ function displaysFiltered(filteredData) {
             `;
         // Displays the weather data on the website with animation and delay
         document.getElementById("hourly").appendChild(showWeather);
+    
     }
 
     // Creats a delay for the animation -> cards come in from left one after the other (see css for animation)
@@ -286,6 +294,8 @@ function weekly(data) {
             if (convertTime(data.hourly.time[j])[0] == date) {
                 let lst = {}
                 lst["temperature"] = data.hourly.temperature_2m[j]
+                lst["apparent_temperature"] = data.hourly.apparent_temperature[j]
+                lst["cloudcover"] = data.hourly.cloudcover[j]
                 lst["rain"] = data.hourly.rain[j]
                 lst["snowfall"] = data.hourly.snowfall[j]
                 lst["precipitation_probability"] = data.hourly.precipitation_probability[j]
@@ -303,6 +313,8 @@ function weekly(data) {
 function displayWeekly(weeklyData) {
     let agvData = []
     let temp = 0
+    let apparent_temperature = 0
+    let cloudcover = 0
     let rain = 0
     let snowfall = 0
     let precipitation_probability = 0
@@ -314,6 +326,8 @@ function displayWeekly(weeklyData) {
     for (let i = 0; i < weeklyData.length; i++) {
         let lst = {}
         temp += (weeklyData[i].temperature)
+        apparent_temperature += (weeklyData[i].apparent_temperature)
+        cloudcover += (weeklyData[i].cloudcover)
         rain += (weeklyData[i].rain)
         snowfall += (weeklyData[i].snowfall)
         precipitation_probability += (weeklyData[i].precipitation_probability)
@@ -322,6 +336,8 @@ function displayWeekly(weeklyData) {
         winddirection += (weeklyData[i].winddirection)
     }
     temp = temp / weeklyData.length
+    apparent_temperature = apparent_temperature / weeklyData.length
+    cloudcover = cloudcover / weeklyData.length
     rain = rain / weeklyData.length
     snowfall = snowfall / weeklyData.length
     precipitation_probability = precipitation_probability / weeklyData.length
@@ -332,6 +348,8 @@ function displayWeekly(weeklyData) {
 
     agvData.push({
         "temprature": temp.toFixed(1),
+        "apparent_temperature": apparent_temperature.toFixed(1),
+        "cloudcover": cloudcover.toFixed(1),
         "rain": rain.toFixed(1),
         "snowfall": snowfall.toFixed(1),
         "precipitation": precipitation_probability.toFixed(1),
@@ -345,6 +363,8 @@ function displayWeekly(weeklyData) {
     showWeather.className = "column";
     showWeather.innerHTML = `
               <h3 class="temp">Temprature: ${agvData[0].temprature}</h3>
+              <h3 class="appTemp">Apparent Temprature: ${agvData[0].apparent_temperature}</h3>
+              <h3 class="cloud">Cloudcover: ${agvData[0].cloudcover}%</h3>
               <h3 class="rain">Rain: ${agvData[0].rain}</h3>
               <h3 class="snow">Snowfall: ${agvData[0].snowfall}</h3>
               <h3 class="vis">Visibility: ${agvData[0].visibility}</h3>
