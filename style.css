@@ -1,5 +1,6 @@
 :root{
-    --background-color: #e6d9d9;
+    --background-color: rgba(255, 255, 255, 0.3);
+    --background-color-hover:  rgba(255, 255, 255, 0.6);
     --primary-color: #a53333;
     --secondary-color: #6c757d;
     --tertiary-color: #6c757d;
@@ -13,6 +14,17 @@
     padding: 0;
     box-sizing: border-box;
 }
+/* Make scrollbar background transparent */
+::-webkit-scrollbar {
+    background-color: transparent;
+    height: 1rem
+  }
+  
+  /* Round scrollbar corners */
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--background-color);
+    border-radius: 10px;
+  }
 
 body{
     min-height: 100vh;
@@ -36,7 +48,9 @@ input{
     height: 3rem;
     width: 45%;
     padding: 0 0.5rem;
-    border: 1px solid black;
+    border: none;
+    
+
     margin-bottom: .5rem;
 }
 input:focus{
@@ -44,21 +58,28 @@ input:focus{
     border-color: var(--primary-color);
 }
 input[name="city"]{
-    border-right: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 input[name="country"]{
-    border-right: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 input[type="submit"]{
     width: 10%;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    background-color: var(--background-color-hover);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+input[type="submit"]:hover{
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
 }
 
 #location{
     height: 2rem;
     margin-bottom: 1rem;
-    border: 1px solid black;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: var(--background-color-hover);
     padding: 0 0.5rem;
     border-radius: var(--border-radius);
     display: none;
@@ -73,9 +94,9 @@ input[type="submit"]{
 }
 
 #hourly .weather{
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--background-color);
     border-radius: var(--border-radius);
-    box-shadow: rgba(99, 99, 99, 0.2) 2px 2px 8px 2px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     height: 20rem;
     width: 15rem;
     padding: 5%;
@@ -85,7 +106,10 @@ input[type="submit"]{
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+}
 
+#hourly :hover {
+    background-color: var(--background-color-hover);
 }
 
 @keyframes slide-left {
@@ -136,7 +160,7 @@ input[type="submit"]{
   }
   
   #weekly .column{
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--background-color);
     box-shadow: rgba(99, 99, 99, 0.2) 2px 2px 8px 2px;
     padding: 0 0.5rem;
     border-radius: var(--border-radius);
@@ -147,6 +171,10 @@ input[type="submit"]{
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  #weekly :hover {
+    background-color: var(--background-color-hover);
   }
 
 .material-symbols-outlined {
