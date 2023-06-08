@@ -1,6 +1,7 @@
 // * Note: For better readability, consider using the 'Better Comments" extension for VS Code *
 
 // ! Imports
+// import { countryList } from '/Backend/country.js';
 import { countryList } from '/S4F_Project/Backend/country.js';
 
 // Defining some variables
@@ -26,19 +27,28 @@ function setFavIcon() {
 
     if (prefersDarkMode) {
         let link =
-            document.querySelector("link[rel*='icon']");
+        document.querySelector("link[rel*='icon']");
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
+        // link.href = "/pictures/Yoda.jpg";
         link.href = "/S4F_Project/pictures/Yoda.jpg";
         document.head.appendChild(link);
-        document.body.style.backgroundColor = "#597684";
+        document.body.style.background = "linear-gradient(to top, #b5c6e0, #ebf4f5)";
+        /*
+        0061ff, 60efff
+        9bf8f4,6f7bf7 -- light
+        9bafd9, 103783 -- darker
+        ebf4f5, b5c6e0 -- Cloudy light
+        f5e6ad, f13c77 -- Redish
+        */
     } else {
         let link =
             document.querySelector("link[rel*='icon']");
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
+        // link.href = "/pictures/Fav-Icon-Dark.svg";
         link.href = "/S4F_Project/pictures/Fav-Icon-Dark.svg";
         document.head.appendChild(link);
     }
