@@ -73,16 +73,19 @@ input[type="submit"]{
 }
 
 #hourly .weather{
-    background-color: pink;
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: var(--border-radius);
+    box-shadow: rgba(99, 99, 99, 0.2) 2px 2px 8px 2px;
     height: 20rem;
     width: 15rem;
-    padding: 0 0.5rem;
+    padding: 5%;
+    margin-bottom: .3rem;
     animation: slide-left 0.5s ease-in-out;
-    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+
 }
 
 @keyframes slide-left {
@@ -98,6 +101,18 @@ input[type="submit"]{
     }
   }
 
+#hourly .weather .time{
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+#hourly .weather .temp{
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
 @keyframes slide-up {
     from {
         bottom: -50vh;
@@ -112,6 +127,7 @@ input[type="submit"]{
 }
 
   #weekly{
+    margin-top: 1rem;
     width: 80%;
     display: grid;
     grid-template-rows: repeat(7, 1fr);
@@ -120,7 +136,8 @@ input[type="submit"]{
   }
   
   #weekly .column{
-    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: rgba(99, 99, 99, 0.2) 2px 2px 8px 2px;
     padding: 0 0.5rem;
     border-radius: var(--border-radius);
     height: 3rem;
@@ -131,3 +148,11 @@ input[type="submit"]{
     justify-content: space-between;
     align-items: center;
   }
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 100,
+  'GRAD' 0,
+  'opsz' 48
+}
