@@ -1,7 +1,7 @@
 // * Note: For better readability, consider using the 'Better Comments" extension for VS Code *
 
 // ! Imports
-import { countryList } from '/Backend/country.js';
+import { countryList } from '/S4F_Project/Backend/country.js';
 
 // Defining some variables
 
@@ -30,7 +30,7 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        link.href = "../pictures/Yoda.jpg";
+        link.href = "/S4F_Project/pictures/Yoda.jpg";
         document.head.appendChild(link);
         document.body.style.backgroundColor = "#597684";
     } else {
@@ -39,7 +39,7 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        link.href = "../pictures/Fav-Icon-Dark.svg";
+        link.href = "/S4F_Project/pictures/Fav-Icon-Dark.svg";
         document.head.appendChild(link);
     }
 }
@@ -68,7 +68,7 @@ function getInformationFromFrom() {
 
 // Takes in the city and country code and returns the latitude and longitude of the location
 async function location(city, country_code) {
-    const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=1d5099211a967e079092731876b2c1cc`);
+    const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=1d5099211a967e079092731876b2c1cc`);
     const locationData = await response.json();
     const latitude = locationData[0].lat
     const longitude = locationData[0].lon
