@@ -1,9 +1,7 @@
 :root{
     --background-color: rgba(255, 255, 255, 0.3);
     --background-color-hover:  rgba(255, 255, 255, 0.6);
-    --primary-color: #a53333;
-    --secondary-color: #6c757d;
-    --tertiary-color: #6c757d;
+    --box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     --font: 'Roboto', sans-serif;
     --font-size: 1rem;
     --border-radius: 1rem;
@@ -49,8 +47,6 @@ input{
     width: 45%;
     padding: 0 0.5rem;
     border: none;
-    
-
     margin-bottom: .5rem;
 }
 input:focus{
@@ -58,7 +54,7 @@ input:focus{
     border-color: var(--primary-color);
 }
 input[name="city"]{
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: var(--box-shadow);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 input[name="country"]{
@@ -68,18 +64,18 @@ input[type="submit"]{
     width: 10%;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
     background-color: var(--background-color-hover);
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: var(--box-shadow);
 }
 input[type="submit"]:hover{
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--background-color-hover);
     cursor: pointer;
 }
 
 #location{
+    background-color: var(--background-color-hover);
     height: 2rem;
     margin-bottom: 1rem;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    background-color: var(--background-color-hover);
+    box-shadow: var(--box-shadow);
     padding: 0 0.5rem;
     border-radius: var(--border-radius);
     display: none;
@@ -96,7 +92,7 @@ input[type="submit"]:hover{
 #hourly .weather{
     background-color: var(--background-color);
     border-radius: var(--border-radius);
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: var(--box-shadow);
     height: 20rem;
     width: 15rem;
     padding: 5%;
@@ -106,6 +102,10 @@ input[type="submit"]:hover{
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+}
+.material-symbols-outlined {
+    font-size: 4rem !important;
+    margin-bottom: 1rem;
 }
 
 #hourly :hover {
@@ -126,13 +126,13 @@ input[type="submit"]:hover{
   }
 
 #hourly .weather .time{
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     margin-bottom: 1rem;
 }
 
 #hourly .weather .temp{
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
 }
@@ -161,7 +161,7 @@ input[type="submit"]:hover{
   
   #weekly .column{
     background-color: var(--background-color);
-    box-shadow: rgba(99, 99, 99, 0.2) 2px 2px 8px 2px;
+    box-shadow: var(--box-shadow);
     padding: 0 0.5rem;
     border-radius: var(--border-radius);
     height: 3rem;
@@ -176,11 +176,3 @@ input[type="submit"]:hover{
   #weekly :hover {
     background-color: var(--background-color-hover);
   }
-
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 100,
-  'GRAD' 0,
-  'opsz' 48
-}
