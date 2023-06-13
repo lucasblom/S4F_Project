@@ -1,8 +1,8 @@
 // * Note: For better readability, consider using the 'Better Comments" extension for VS Code *
 
 // ! Imports
-// import { countryList } from '/Backend/country.js';
-import { countryList } from '/S4F_Project/Backend/country.js';
+import { countryList } from '/Backend/country.js';
+// import { countryList } from '/S4F_Project/Backend/country.js';
 
 // Defining some variables
 
@@ -31,8 +31,8 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        // link.href = "/pictures/Yoda.jpg";
-        link.href = "/S4F_Project/pictures/Yoda.jpg";
+        link.href = "/pictures/Yoda.jpg";
+        // link.href = "/S4F_Project/pictures/Yoda.jpg";
         document.head.appendChild(link);
         document.body.style.background = "linear-gradient(to top, #b5c6e0, #ebf4f5)";
         /*
@@ -43,13 +43,12 @@ function setFavIcon() {
         f5e6ad, f13c77 -- Redish
         */
     } else {
-        let link =
-            document.querySelector("link[rel*='icon']");
+        let link = document.querySelector("link[rel*='icon']");
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        // link.href = "/pictures/Fav-Icon-Dark.svg";
-        link.href = "/S4F_Project/pictures/Fav-Icon-Dark.svg";
+        link.href = "/pictures/Fav-Icon-Dark.svg";
+        // link.href = "/S4F_Project/pictures/Fav-Icon-Dark.svg";
         document.head.appendChild(link);
     }
 }
@@ -174,14 +173,14 @@ function filterByDate(date, data) {
             // clears lst every time the loop runs
             let lst = {}
             lst["time"] = convertTime(data.hourly.time[i])
-            lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
-            lst["apparent_temperature"] = data.hourly.apparent_temperature[i] + "°C"
-            lst["cloudcover"] = data.hourly.cloudcover[i] + "%"
-            lst["rain"] = data.hourly.rain[i] + "mm"
-            lst["snowfall"] = data.hourly.snowfall[i] + "mm"
-            lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
-            lst["visibility"] = data.hourly.visibility[i] + "m"
-            lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
+            lst["temperature"] = data.hourly.temperature_2m[i]
+            lst["apparent_temperature"] = data.hourly.apparent_temperature[i]
+            lst["cloudcover"] = data.hourly.cloudcover[i]
+            lst["rain"] = data.hourly.rain[i] 
+            lst["snowfall"] = data.hourly.snowfall[i] 
+            lst["precipitation_probability"] = data.hourly.precipitation_probability[i]
+            lst["visibility"] = data.hourly.visibility[i]
+            lst["windspeed"] = data.hourly.windspeed_10m[i]
             lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
             // adds lst to the filteredData array
             filteredData.push(lst)
@@ -194,14 +193,15 @@ function filterByDate(date, data) {
             if (convertTime(data.hourly.time[i])[0] == tomorrow()) {
                 let lst = {}
                 lst["time"] = convertTime(data.hourly.time[i])
-                lst["temperature"] = data.hourly.temperature_2m[i] + "°C"
-                lst["apparent_temperature"] = data.hourly.apparent_temperature[i] + "°C"
-                lst["cloudcover"] = data.hourly.cloudcover[i] + "%"
-                lst["rain"] = data.hourly.rain[i] + "mm"
-                lst["snowfall"] = data.hourly.snowfall[i] + "mm"
-                lst["precipitation_probability"] = data.hourly.precipitation_probability[i] + "%"
-                lst["visibility"] = data.hourly.visibility[i] + "m"
-                lst["windspeed"] = data.hourly.windspeed_10m[i] + "km/h"
+                lst["weatherIcon"] = ``
+                lst["temperature"] = data.hourly.temperature_2m[i]
+                lst["apparent_temperature"] = data.hourly.apparent_temperature[i]
+                lst["cloudcover"] = data.hourly.cloudcover[i]
+                lst["rain"] = data.hourly.rain[i]
+                lst["snowfall"] = data.hourly.snowfall[i]
+                lst["precipitation_probability"] = data.hourly.precipitation_probability[i]
+                lst["visibility"] = data.hourly.visibility[i]
+                lst["windspeed"] = data.hourly.windspeed_10m[i]
                 lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
                 // adds lst to the filteredData array
                 filteredData.push(lst)
@@ -228,18 +228,40 @@ function displaysFiltered(filteredData) {
     // loops through the filteredData array and displays the data on the website
 
     for (let i = 0; i <= 23; i++) {
+         
+        // takes weather data and displays an icon based on the weather
+        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover <= 50) {
+            filteredData[i].weatherIcon = `<span class="material-symbols-outlined">light_mode</span>`
+        }
+        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover < 90 && filteredData[i].cloudcover > 50) {
+            filteredData[i].weatherIcon = `<span class="material-symbols-outlined">partly_cloudy_day</span>`
+        }
+        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover > 90) {
+            filteredData[i].weatherIcon = `<span class="material-symbols-outlined">cloud</span>`
+        }
+        if (filteredData[i].snowfall > 0 && filteredData[i].rain == 0) {
+            filteredData[i].weatherIcon = `<span class="material-symbols-outlined">weather_snowy</span>`
+        }
+        if (filteredData[i].rain > 0 && filteredData[i].snowfall == 0) {
+            filteredData[i].weatherIcon = `<span class="material-symbols-outlined">rainy</span>`
+        }
+        if (filteredData[i].rain > 0 && filteredData[i].snowfall > 0) {
+            filteredData[i].weatherIcon = `<span class="material-symbols-outlined">weather_mix</span>`
+        }
+
         const showWeather = document.createElement("div");
         showWeather.className = "weather";
         showWeather.innerHTML = `
               <h3 class="time">${filteredData[i].time[1]}</h3>
-              <h3 class="temp"> ${filteredData[i].temperature}</h3>
-              <h3 class="appTemp">Feels like: ${filteredData[i].apparent_temperature}</h3>
-              <h3 class="cloud">Cloudcover: ${filteredData[i].cloudcover}</h3>
-              <h3 class="rain">Rain: ${filteredData[i].rain}</h3>
-              <h3 class="snow">Snowfall: ${filteredData[i].snowfall}</h3>
-              <h3 class="vis">Visibility: ${filteredData[i].visibility}</h3>
-              <h3 class="prbRain">Percipitation: ${filteredData[i].precipitation_probability}</h3>
-              <h3 class="wind">Wind Speed: ${filteredData[i].windspeed}</h3>
+              <h3 class="weatherIcon">${filteredData[i].weatherIcon}</h3>
+              <h3 class="temp"> ${filteredData[i].temperature}°C</h3>
+              <h3 class="appTemp">Feels like: ${filteredData[i].apparent_temperature}°C</h3>
+              <h3 class="cloud">Cloudcover: ${filteredData[i].cloudcover}%</h3>
+              <h3 class="rain">Rain: ${filteredData[i].rain}mm</h3>
+              <h3 class="snow">Snowfall: ${filteredData[i].snowfall}mm</h3>
+              <h3 class="vis">Visibility: ${filteredData[i].visibility}m</h3>
+              <h3 class="prbRain">Percipitation: ${filteredData[i].precipitation_probability}%</h3>
+              <h3 class="wind">Wind Speed: ${filteredData[i].windspeed}km/h</h3>
               <h3 class="windDir">Winddirection: ${filteredData[i].winddirection}</h3>
             `;
         // Displays the weather data on the website with animation and delay
@@ -373,7 +395,7 @@ function displayWeekly(weeklyData) {
     showWeather.className = "column";
     showWeather.innerHTML = `
               <h3 class="temp">Temprature: ${agvData[0].temprature}</h3>
-              <h3 class="appTemp">Apparent Temprature: ${agvData[0].apparent_temperature}</h3>
+              <h3 class="appTemp">Feels Like: ${agvData[0].apparent_temperature}</h3>
               <h3 class="cloud">Cloudcover: ${agvData[0].cloudcover}%</h3>
               <h3 class="rain">Rain: ${agvData[0].rain}</h3>
               <h3 class="snow">Snowfall: ${agvData[0].snowfall}</h3>
