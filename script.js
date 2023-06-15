@@ -1,10 +1,8 @@
 // * Note: For better readability, consider using the 'Better Comments" extension for VS Code *
 
-// ! Imports
-// import { countryList } from '/Backend/country.js';
-import { countryList } from '/S4F_Project/Backend/country.js';
-
 // Defining some variables
+const key = '1d5099211a967e079092731876b2c1cc'
+let countryID = ''
 
 // ! DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -14,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         console.log("Form submitted");
 
-        location(getInformationFromFrom()[0], getInformationFromFrom()[2])
+        // location(getInformationFromFrom()[0], getInformationFromFrom()[2])
+        weather(getInformationFromFrom()[0])
 
         document.querySelector("form").style = "width: 40%; transition: 0.5s;"
     })
@@ -31,7 +30,7 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        // link.href = "/pictures/Yoda.jpg";
+        //! link.href = "/pictures/Yoda.jpg";
         link.href = "/S4F_Project/pictures/Yoda.jpg";
         document.head.appendChild(link);
         document.body.style.background = "linear-gradient(to top, #b5c6e0, #ebf4f5)";
@@ -47,7 +46,7 @@ function setFavIcon() {
         document.createElement("link");
         link.type = "image/svg+xml";
         link.rel = "icon";
-        // link.href = "/pictures/Fav-Icon-Dark.svg";
+        //! link.href = "/pictures/Fav-Icon-Dark.svg";
         link.href = "/S4F_Project/pictures/Fav-Icon-Dark.svg";
         document.head.appendChild(link);
     }
@@ -62,26 +61,43 @@ function horizontalScroll() {
 // src: /Frontend/index.html
 function getInformationFromFrom() {
     const city = document.getElementById("city").value;
-    const country = document.getElementById("country").value;
-    if (city === "" || country === "") {
+    if (city === "") {
         alert("Please fill in the form");
         return;
     }
+    /*
     if (countryList[country.toLowerCase()] === undefined) {
         alert("Please enter a valid country");
         return;
     }
-    const country_code = countryList[country.toLowerCase()];
-    return [city, country, country_code];
+    */
+    // const country_code = countryList[country.toLowerCase()];
+    return [city];
+    
 }
 
 // Takes in the city and country code and returns the latitude and longitude of the location
+/*
 async function location(city, country_code) {
-    const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=1d5099211a967e079092731876b2c1cc`);
+    const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=${key}`);
     const locationData = await response.json();
     const latitude = locationData[0].lat
     const longitude = locationData[0].lon
     console.log(locationData[0].name + " " + locationData[0].country + "\n" + 'Latitude: ' + locationData[0].lat + " \n" + 'Longitude: ' + locationData[0].lon + '\n')
+    logJSONData(latitude, longitude)
+}
+*/
+
+// Takes in city and return weather description
+async function weather(city) {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
+    const weatherData = await response.json();
+    console.log(weatherData)
+    countryID = weatherData.sys.country
+    const latitude = weatherData.coord.lat
+    const longitude = weatherData.coord.lon
+    console.log(weatherData.name + " " + weatherData.sys.country + "\n" + 'Latitude: ' + weatherData.coord.lat + " \n" + 'Longitude: ' + weatherData.coord.lon + '\n')
+    console.log(weatherData.weather[0].description)
     logJSONData(latitude, longitude)
 }
 
@@ -114,7 +130,7 @@ function caridnalDirection(degrees) {
     else if (degrees >= 202.5 && degrees < 247.5) direction = "SW"
     else if (degrees >= 247.5 && degrees < 292.5) direction = "W"
     else if (degrees >= 292.5 && degrees < 337.5) direction = "NW"
-    else if (degrees >= 337.5 && degrees < 360) direction = "N"
+    else if (degrees >= 337.5 && degrees <= 360) direction = "N"
     else direction = "Error"
     return direction
 }
@@ -181,13 +197,12 @@ function filterByDate(date, data) {
             lst["precipitation_probability"] = data.hourly.precipitation_probability[i]
             lst["visibility"] = data.hourly.visibility[i]
             lst["windspeed"] = data.hourly.windspeed_10m[i]
-            lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
+            lst["winddirection"] = data.hourly.winddirection_10m[i]
             // adds lst to the filteredData array
             filteredData.push(lst)
 
         }
     }
-    console.log(filteredData.length)
     if (filteredData.length < 23) {
         for (let i = 0; i in data.hourly.time; i++) {
             if (convertTime(data.hourly.time[i])[0] == tomorrow()) {
@@ -202,7 +217,7 @@ function filterByDate(date, data) {
                 lst["precipitation_probability"] = data.hourly.precipitation_probability[i]
                 lst["visibility"] = data.hourly.visibility[i]
                 lst["windspeed"] = data.hourly.windspeed_10m[i]
-                lst["winddirection"] = caridnalDirection(data.hourly.winddirection_10m[i]) + " (" + data.hourly.winddirection_10m[i] + "°)"
+                lst["winddirection"] = data.hourly.winddirection_10m[i]
                 // adds lst to the filteredData array
                 filteredData.push(lst)
             }
@@ -213,7 +228,6 @@ function filterByDate(date, data) {
         filteredData.pop()[24, -1]
     }
     // return filteredData
-    console.log(filteredData)
     displaysFiltered(filteredData)
 }
 
@@ -230,10 +244,10 @@ function displaysFiltered(filteredData) {
     for (let i = 0; i <= 23; i++) {
          
         // takes weather data and displays an icon based on the weather
-        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover <= 50) {
+        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover < 50) {
             filteredData[i].weatherIcon = `<span class="material-symbols-outlined">light_mode</span>`
         }
-        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover < 90 && filteredData[i].cloudcover > 50) {
+        if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover <= 90 && filteredData[i].cloudcover >= 50) {
             filteredData[i].weatherIcon = `<span class="material-symbols-outlined">partly_cloudy_day</span>`
         }
         if (filteredData[i].rain == 0 && filteredData[i].snowfall == 0 && filteredData[i].cloudcover > 90) {
@@ -248,26 +262,43 @@ function displaysFiltered(filteredData) {
         if (filteredData[i].rain > 0 && filteredData[i].snowfall > 0) {
             filteredData[i].weatherIcon = `<span class="material-symbols-outlined">weather_mix</span>`
         }
-
+        // creates a div for each hour of weather data
         const showWeather = document.createElement("div");
         showWeather.className = "weather";
         showWeather.innerHTML = `
               <h3 class="time">${filteredData[i].time[1]}</h3>
               <h3 class="weatherIcon">${filteredData[i].weatherIcon}</h3>
               <h3 class="temp"> ${filteredData[i].temperature}°C</h3>
-              <h3 class="appTemp">Feels like: ${filteredData[i].apparent_temperature}°C</h3>
-              <h3 class="cloud">Cloudcover: ${filteredData[i].cloudcover}%</h3>
-              <h3 class="rain">Rain: ${filteredData[i].rain}mm</h3>
-              <h3 class="snow">Snowfall: ${filteredData[i].snowfall}mm</h3>
-              <h3 class="vis">Visibility: ${filteredData[i].visibility}m</h3>
-              <h3 class="prbRain">Percipitation: ${filteredData[i].precipitation_probability}%</h3>
-              <h3 class="wind">Wind Speed: ${filteredData[i].windspeed}km/h</h3>
-              <h3 class="windDir">Winddirection: ${filteredData[i].winddirection}</h3>
+              <h3 class="appTemp"> ${filteredData[i].apparent_temperature}°C</h3>
+              <div id="bottom">
+                <div class="split">
+                    <h2>Rain:</h2>
+                    <div class="information">
+                        <h3 class="rain">${filteredData[i].rain}mm</h3>
+                        <h3 class="snow">${filteredData[i].snowfall}mm</h3>
+                        <h3 class="prbRain">${filteredData[i].precipitation_probability}%</h3>
+                    </div>
+                </div>
+                <div class="split">
+                    <h2>Wind:</h2>
+                    <div class="information">
+                        <!--<img src="/pictures/Nav-Circle.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">--!>
+                        <img src="/S4F_Project/pictures/pin-north.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">
+                        <h3 class="wind"> ${filteredData[i].windspeed}km/h</h3>
+                    </div>
+                </div>
+              </div>
             `;
+
         // Displays the weather data on the website with animation and delay
         document.getElementById("hourly").appendChild(showWeather);
-    
+        if (filteredData[i].snowfall == 0) {
+            document.getElementsByClassName("snow")[i].style = "display: none;"
+        }
+        
+
     }
+
 
     // Creats a delay for the animation -> cards come in from left one after the other (see css for animation)
     for (let i = 0; i <= 23; i++) {
@@ -276,9 +307,7 @@ function displaysFiltered(filteredData) {
         }, 200 * i);
     }
     document.getElementById("location").style = "display: flex; justify-content: center; align-items: center;"
-    document.getElementById("location").innerHTML = getInformationFromFrom()[0] + ", " +
-        getInformationFromFrom()[1] + " (" +
-        getInformationFromFrom()[2] + ")"
+    document.getElementById("location").innerHTML = getInformationFromFrom()[0] +" (" + countryID + ")"
 
 }
 
@@ -325,6 +354,7 @@ function weekly(data) {
         for (let j = 0; j < data.hourly.time.length; j++) {
             if (convertTime(data.hourly.time[j])[0] == date) {
                 let lst = {}
+                lst["time"] = convertTime(data.hourly.time[j])
                 lst["temperature"] = data.hourly.temperature_2m[j]
                 lst["apparent_temperature"] = data.hourly.apparent_temperature[j]
                 lst["cloudcover"] = data.hourly.cloudcover[j]
@@ -339,12 +369,13 @@ function weekly(data) {
         }
         displayWeekly(weeklyData)
     }
-
 }
 
 function displayWeekly(weeklyData) {
     let agvData = []
-    let temp = 0
+    let temp = []
+    let tempMax = 0
+    let tempMin = 0
     let apparent_temperature = 0
     let cloudcover = 0
     let rain = 0
@@ -356,8 +387,7 @@ function displayWeekly(weeklyData) {
 
     // Loops through weeklyData and returns the averages for each day
     for (let i = 0; i < weeklyData.length; i++) {
-        let lst = {}
-        temp += (weeklyData[i].temperature)
+        temp.push(weeklyData[i].temperature)
         apparent_temperature += (weeklyData[i].apparent_temperature)
         cloudcover += (weeklyData[i].cloudcover)
         rain += (weeklyData[i].rain)
@@ -367,7 +397,8 @@ function displayWeekly(weeklyData) {
         windspeed += (weeklyData[i].windspeed)
         winddirection += (weeklyData[i].winddirection)
     }
-    temp = temp / weeklyData.length
+    tempMax = Math.max(...temp)
+    tempMin = Math.min(...temp)
     apparent_temperature = apparent_temperature / weeklyData.length
     cloudcover = cloudcover / weeklyData.length
     rain = rain / weeklyData.length
@@ -376,10 +407,10 @@ function displayWeekly(weeklyData) {
     visibility = visibility / weeklyData.length
     windspeed = windspeed / weeklyData.length
     winddirection = winddirection / weeklyData.length
-    console.log(weeklyData.length)
 
     agvData.push({
-        "temprature": temp.toFixed(1),
+        "tempratureMax": tempMax.toFixed(1),
+        "tempratureMin": tempMin.toFixed(1),
         "apparent_temperature": apparent_temperature.toFixed(1),
         "cloudcover": cloudcover.toFixed(1),
         "rain": rain.toFixed(1),
@@ -391,19 +422,32 @@ function displayWeekly(weeklyData) {
     })
 
     // loops through the filteredData array and displays the data on the website
+    let snow = ``
     const showWeather = document.createElement("div");
+    if (agvData[0].snowfall == 0) {
+        snow = ``        
+    }
+    if (agvData[0].snowfall > 0) {
+        snow = `<h3 class="snow thing">Snowfall: ${agvData[0].snowfall}</h3>`
+    }
+    if (weeklyData[0].time[0] == currentDate()) {
+        weeklyData[0].time[0] = "Today"
+    }
+    if (weeklyData[0].time[0] == tomorrow()) {
+        weeklyData[0].time[0] = "Tomorrow"
+    }
     showWeather.className = "column";
     showWeather.innerHTML = `
-              <h3 class="temp">Temprature: ${agvData[0].temprature}</h3>
-              <h3 class="appTemp">Feels Like: ${agvData[0].apparent_temperature}</h3>
-              <h3 class="cloud">Cloudcover: ${agvData[0].cloudcover}%</h3>
-              <h3 class="rain">Rain: ${agvData[0].rain}</h3>
-              <h3 class="snow">Snowfall: ${agvData[0].snowfall}</h3>
-              <h3 class="vis">Visibility: ${agvData[0].visibility}</h3>
-              <h3 class="prbRain">Percipitation: ${agvData[0].precipitation}%</h3>
-              <h3 class="wind">Wind Speed: ${agvData[0].windspeed}</h3>
-                <h3 class="windDir">Winddirection: ${caridnalDirection(agvData[0].winddirection)}(${agvData[0].winddirection})</h3>
+                <h3 class="date thing">${weeklyData[0].time[0]}</h3>
+                <div id="temp" class="thing">
+                    <h3 class="tempMin">${agvData[0].tempratureMin}°</h3>
+                    <div id="tempLine"></div>
+                    <h3 class="tempMax">${agvData[0].tempratureMax}°</h3>
+                </div>
+                <h3 class="rain thing">Rain: ${agvData[0].rain}</h3>
+                ${snow}
+                <h3 class="prbRain thing">Percipitation: ${agvData[0].precipitation}%</h3>
+                <h3 class="wind thing">Wind: ${agvData[0].windspeed}km/h</h3>
             `;
-    // Displays the weather data on the website with animation and delay
     document.getElementById("weekly").appendChild(showWeather);
 }
