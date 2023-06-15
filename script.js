@@ -283,7 +283,7 @@ function displaysFiltered(filteredData) {
                     <h2>Wind:</h2>
                     <div class="information">
                         <!--<img src="/pictures/Nav-Circle.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">--!>
-                        <img src="/S4F_Project/pictures/pin-north.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">
+                        <img src="/S4F_Project/pictures/Nav-Circle.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">
                         <h3 class="wind"> ${filteredData[i].windspeed}km/h</h3>
                     </div>
                 </div>
