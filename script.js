@@ -106,6 +106,10 @@ async function weather(city) {
 async function logJSONData(latitude, longitude) {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,apparent_temperature,cloudcover,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
     const jsonData = await response.json();
+    if (jsonData.error) {
+        alert("Please enter a valid city")
+        return
+    }
     // return jsonData
     filterByDate(currentDate(), jsonData)
     weekly(jsonData)
@@ -282,7 +286,7 @@ function displaysFiltered(filteredData) {
                 <div class="split">
                     <h2>Wind:</h2>
                     <div class="information">
-                        <!--<img src="/pictures/Nav-Circle.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">--!>
+                    <!--<img src="/pictures/Nav-Circle.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">--!>
                         <img src="/S4F_Project/pictures/Nav-Circle.svg" class="circle" alt="pin" style="transform: rotate(${filteredData[i].winddirection}deg);">
                         <h3 class="wind"> ${filteredData[i].windspeed}km/h</h3>
                     </div>
@@ -302,9 +306,31 @@ function displaysFiltered(filteredData) {
 
     // Creats a delay for the animation -> cards come in from left one after the other (see css for animation)
     for (let i = 0; i <= 23; i++) {
-        setTimeout(() => {
-            document.getElementsByClassName("weather")[i].style = "opacity: 1; margin-top: 0vh;"
-        }, 200 * i);
+        document.getElementsByClassName("weather")[i].style = "opacity: 1; margin-top: 0vh;"
+        if (filteredData[i].temperature >= 25) {
+            document.getElementsByClassName("weather")[i].style = "background: linear-gradient(45deg, #f5e6ad, #f77f0080, #f77f00c0);"
+        }
+        if (filteredData[i].temperature < 25 && filteredData[i].temperature >= 15) {
+            document.getElementsByClassName("weather")[i].style = "background: linear-gradient(45deg, #f5e6ad, #f77f0080);"
+        }
+        if (filteredData[i].temperature < 15 && filteredData[i].temperature >= 5) {
+            document.getElementsByClassName("weather")[i].style = "background: linear-gradient(45deg, #b5c6e080, #f5e6ad);"
+        }
+        if (filteredData[i].temperature < 5 && filteredData[i].temperature >= -5) {
+            document.getElementsByClassName("weather")[i].style = "background: linear-gradient(45deg, #d9dfed, #b5c6e0);"
+        }
+        if (filteredData[i].temperature < -5) {
+            document.getElementsByClassName("weather")[i].style = "background: linear-gradient(45deg, #9bafd980, #d9dfed);"
+        }
+
+                /*
+        0061ff, 60efff
+        9bf8f4,6f7bf7 -- light
+        9bafd9, 103783 -- darker
+        ebf4f5, b5c6e0 -- Cloudy light
+        f5e6ad, f13c77 -- Redish
+        */
+
     }
     document.getElementById("location").style = "display: flex; justify-content: center; align-items: center;"
     document.getElementById("location").innerHTML = getInformationFromFrom()[0] +" (" + countryID + ")"
