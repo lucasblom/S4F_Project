@@ -60,11 +60,13 @@ input:focus{
     border-color: var(--primary-color);
 }
 input[name="city"]{
+    min-width: fit-content;
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 input[type="submit"]{
     width: 10%;
+    min-width: fit-content;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
     background-color: var(--background-color-hover);
     box-shadow: var(--box-shadow);
@@ -106,6 +108,7 @@ input[type="submit"]:hover{
     justify-content: space-between;
     align-items: center;
 }
+
 .material-symbols-outlined {
     font-size: 4rem !important;
     margin-bottom: 1rem;
@@ -209,7 +212,8 @@ input[type="submit"]:hover{
 
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    gap: 5%;
   }
 
   #weekly .column:hover {
@@ -233,3 +237,29 @@ input[type="submit"]:hover{
     background: linear-gradient(to right, #40c9ff, #00ff8880,  #f89b29);
   }
 
+  @media only screen and (max-width: 1000px) {
+    form {
+        margin-top: 2rem;
+    }
+
+    #weekly .column {
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: .5rem;
+        padding: 1rem;
+        background-color: var(--background-color);
+    }
+    #weekly .column #temp {
+        width: 60%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+    }
+    #weekly .column #temp #tempLine {
+        height: 10px;
+    }
+  }
