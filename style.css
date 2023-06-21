@@ -35,6 +35,11 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center;
+    backdrop-filter: blur(5px);
+    overflow: hidden;
 }
 main{
     width: 100vw;
