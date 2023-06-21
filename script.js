@@ -2,6 +2,7 @@
 
 // Defining some variables
 const key = '1d5099211a967e079092731876b2c1cc'
+const accessKey = '0eE1Y8mGWqbolmwzY-IKfoBjeYjhzX9GMHTqFwiTHjI';
 let countryID = ''
 
 // ! DOM Content Loaded
@@ -13,9 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Form submitted");
 
         // location(getInformationFromFrom()[0], getInformationFromFrom()[2])
+        getPhotoByLocation(getInformationFromFrom()[0])
         weather(getInformationFromFrom()[0])
-
-        document.querySelector("form").style = "width: 40%; transition: 0.5s;"
     })
 })
 
@@ -65,13 +65,6 @@ function getInformationFromFrom() {
         alert("Please fill in the form");
         return;
     }
-    /*
-    if (countryList[country.toLowerCase()] === undefined) {
-        alert("Please enter a valid country");
-        return;
-    }
-    */
-    // const country_code = countryList[country.toLowerCase()];
     return [city];
     
 }
@@ -93,6 +86,16 @@ async function weather(city) {
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
     const weatherData = await response.json();
     console.log(weatherData)
+    if (weatherData.cod === "404") {
+        document.querySelector("input[name=city]").style = "border: 1px solid red; value: ;"
+        document.querySelector("input[type=submit").style = "border: 1px solid red"
+        document.getElementsByName("city")[0].placeholder = "City not found"
+        return
+    }
+    document.querySelector("form").style = "width: 40%; transition: 0.5s;"
+    document.querySelector("input[type=submit").style = "border: none;"
+    document.querySelector("input[name=city]").style = "border: none;"
+    document.getElementsByName("city")[0].placeholder = "Please Enter City"
     countryID = weatherData.sys.country
     const latitude = weatherData.coord.lat
     const longitude = weatherData.coord.lon
@@ -106,16 +109,60 @@ async function weather(city) {
 async function logJSONData(latitude, longitude) {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,apparent_temperature,cloudcover,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
     const jsonData = await response.json();
-    if (jsonData.error) {
-        alert("Please enter a valid city")
-        return
-    }
     // return jsonData
     filterByDate(currentDate(), jsonData)
     weekly(jsonData)
 }
+// Takes in Location and returns a picture
+function getPhotoByLocation(location) {
+    // Set your access key
+    const accessKey = '0eE1Y8mGWqbolmwzY-IKfoBjeYjhzX9GMHTqFwiTHjI';
+  
+    // Send GET request to Unsplash API
+    return fetch(`https://api.unsplash.com/search/photos?query=${location}&client_id=${accessKey}`)
+      .then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+      })
+      .then(data => {
+        const photos = data.results;
+        let currentIndex = 0;
+  
+        // Find the first photo that is wider than it is tall
+        const findWidePhoto = () => {
+          const currentPhoto = photos[currentIndex];
+          if (currentPhoto.width > currentPhoto.height) {
+            const photoUrl = currentPhoto.urls.regular;
+            console.log(photoUrl);
+            document.body.style.backgroundImage = `url(${photoUrl})`;
+            return photoUrl;
+          } else {
+            currentIndex++;
+            if (currentIndex < photos.length) {
+              return findWidePhoto();
+            } else {
+              document.body.style.background = `linear-gradient(to top, #b5c6e0, #ebf4f5)`;
+              throw new Error('No wide photos found for the location.');
+            }
+          }
+        };
+  
+        if (photos.length > 0) {
+          return findWidePhoto();
+        } else {
+          document.body.style.background = `linear-gradient(to top, #b5c6e0, #ebf4f5)`;
+          throw new Error('No photos found for the location.');
 
-
+        }
+      })
+      .catch(error => {
+        throw new Error(`Error: ${error.message}`);
+      });
+  }
 // takes in the date and time from the weatherData array and returns the date and time in a readable format 
 function convertTime(time) {
     let date = []
@@ -449,6 +496,8 @@ function displayWeekly(weeklyData) {
 
     // loops through the filteredData array and displays the data on the website
     let snow = ``
+    let minTemp = ""
+    let maxTemp = ""
     const showWeather = document.createElement("div");
     if (agvData[0].snowfall == 0) {
         snow = ``        
@@ -470,9 +519,9 @@ function displayWeekly(weeklyData) {
                     <div id="tempLine"></div>
                     <h3 class="tempMax">${agvData[0].tempratureMax}°</h3>
                 </div>
-                <h3 class="rain thing">Rain: ${agvData[0].rain}</h3>
+                <h3 class="rain thing">Rain: ${agvData[0].rain}mm</h3>
                 ${snow}
-                <h3 class="prbRain thing">Percipitation: ${agvData[0].precipitation}%</h3>
+                <h3 class="prbRain thing">Probability: ${agvData[0].precipitation}%</h3>
                 <h3 class="wind thing">Wind: ${agvData[0].windspeed}km/h</h3>
             `;
     document.getElementById("weekly").appendChild(showWeather);
