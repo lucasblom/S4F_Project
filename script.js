@@ -5,6 +5,8 @@ const key = '1d5099211a967e079092731876b2c1cc'
 const accessKey = '0eE1Y8mGWqbolmwzY-IKfoBjeYjhzX9GMHTqFwiTHjI';
 let countryID = ''
 
+// ! Event Listeners
+
 // ! DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function () {
     setFavIcon();
@@ -14,10 +16,38 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Form submitted");
 
         // location(getInformationFromFrom()[0], getInformationFromFrom()[2])
-        getPhotoByLocation(getInformationFromFrom()[0])
         weather(getInformationFromFrom()[0])
     })
 })
+
+
+// Horizontal scroll using mouse drag
+// https://stackoverflow.com/questions/28576636/mouse-click-and-drag-instead-of-horizontal-scroll-bar-to-view-full-content-of-c
+const slider = document.getElementById('hourly');
+let mouseDown = false;
+let startX, scrollLeft;
+
+let startDragging = function (e) {
+  mouseDown = true;
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+};
+let stopDragging = function (event) {
+  mouseDown = false;
+};
+
+slider.addEventListener('mousemove', (e) => {
+  e.preventDefault();
+  if(!mouseDown) { return; }
+  const x = e.pageX - slider.offsetLeft;
+  const scroll = x - startX;
+  slider.scrollLeft = scrollLeft - 2 * scroll;
+});
+
+// Add the event listeners
+slider.addEventListener('mousedown', startDragging, false);
+slider.addEventListener('mouseup', stopDragging, false);
+slider.addEventListener('mouseleave', stopDragging, false);
 
 
 // ! Functions
@@ -69,23 +99,10 @@ function getInformationFromFrom() {
     
 }
 
-// Takes in the city and country code and returns the latitude and longitude of the location
-/*
-async function location(city, country_code) {
-    const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${country_code}&appid=${key}`);
-    const locationData = await response.json();
-    const latitude = locationData[0].lat
-    const longitude = locationData[0].lon
-    console.log(locationData[0].name + " " + locationData[0].country + "\n" + 'Latitude: ' + locationData[0].lat + " \n" + 'Longitude: ' + locationData[0].lon + '\n')
-    logJSONData(latitude, longitude)
-}
-*/
-
 // Takes in city and return weather description
 async function weather(city) {
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
     const weatherData = await response.json();
-    console.log(weatherData)
     if (weatherData.cod === "404") {
         document.querySelector("input[name=city]").style = "border: 1px solid red; value: ;"
         document.querySelector("input[type=submit").style = "border: 1px solid red"
@@ -100,8 +117,9 @@ async function weather(city) {
     const latitude = weatherData.coord.lat
     const longitude = weatherData.coord.lon
     console.log(weatherData.name + " " + weatherData.sys.country + "\n" + 'Latitude: ' + weatherData.coord.lat + " \n" + 'Longitude: ' + weatherData.coord.lon + '\n')
-    console.log(weatherData.weather[0].description)
+    document.title = weatherData.name + " " + weatherData.sys.country
     logJSONData(latitude, longitude)
+    getPhotoByLocation(getInformationFromFrom()[0])
 }
 
 // Takes in the latitude and longitude and logs the weather data
@@ -113,6 +131,7 @@ async function logJSONData(latitude, longitude) {
     filterByDate(currentDate(), jsonData)
     weekly(jsonData)
 }
+
 // Takes in Location and returns a picture
 function getPhotoByLocation(location) {
     // Set your access key
@@ -137,7 +156,7 @@ function getPhotoByLocation(location) {
           const currentPhoto = photos[currentIndex];
           if (currentPhoto.width > currentPhoto.height) {
             const photoUrl = currentPhoto.urls.regular;
-            console.log(photoUrl);
+            console.log('Image Origin: Unsplashed\n' + 'Photo URL:' + photoUrl);
             document.body.style.backgroundImage = `url(${photoUrl})`;
             return photoUrl;
           } else {
