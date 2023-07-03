@@ -1,8 +1,9 @@
 :root{
-    --background-color: rgba(255, 255, 255, 0.3);
-    --background-color-hover:  rgba(255, 255, 255, 0.6);
+    --background-color: rgba(255, 255, 255, 0.6);
+    --background-color-hover:  rgba(255, 255, 255, 0.9);
     --box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     --font: 'Roboto', sans-serif;
+    --secondary-font: 'Roboto Mono', monospace;
     --font-size: 1rem;
     --border-radius: 1rem;
     --transition: all 0.3s linear;
@@ -100,11 +101,11 @@ input[type="submit"]:hover{
 }
 #hourly{
     width: 80%;
+    height: fit-content !important;
     display: grid;
     grid-template-columns: repeat(24, 1fr);
     gap: 1rem;
-    overflow-y: hidden;
-    white-space: nowrap;
+    overflow-x: scroll; 
 }
 
 #hourly .weather{
@@ -116,6 +117,7 @@ input[type="submit"]:hover{
     padding: 5%;
     margin-bottom: .3rem;
     animation: slide-left 0.5s ease-in-out;
+    transition: .3s ease-in-out;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -157,11 +159,6 @@ input[type="submit"]:hover{
     width: 50%;
     aspect-ratio: 1/1;
     display: flex;
-}
-
-
-#hourly .weather:hover {
-    background-color: var(--background-color-hover);
 }
 
 @keyframes slide-left {
