@@ -4,6 +4,7 @@
 const key = '1d5099211a967e079092731876b2c1cc'
 const accessKey = '0eE1Y8mGWqbolmwzY-IKfoBjeYjhzX9GMHTqFwiTHjI';
 let countryID = ''
+let timeZone = ''
 
 // ! Event Listeners
 
@@ -98,7 +99,7 @@ async function weather(city) {
     countryID = weatherData.sys.country
     const latitude = weatherData.coord.lat
     const longitude = weatherData.coord.lon
-    console.log(weatherData.name + " " + weatherData.sys.country + "\n" + 'Latitude: ' + weatherData.coord.lat + " \n" + 'Longitude: ' + weatherData.coord.lon + '\n')
+    console.log(weatherData.name + " " + weatherData.sys.country + "\n" + 'Latitude: ' + weatherData.coord.lat + " \n" + 'Longitude: ' + weatherData.coord.lon + '\n' + 'Time Zone: ' + timeZone + '\n')
     document.title = weatherData.name + " " + weatherData.sys.country
     logJSONData(latitude, longitude)
     getPhotoByLocation(getInformationFromFrom()[0])
@@ -109,6 +110,7 @@ async function weather(city) {
 async function logJSONData(latitude, longitude) {
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,apparent_temperature,cloudcover,rain,snowfall,precipitation_probability,visibility,windspeed_10m,winddirection_10m`);
     const jsonData = await response.json();
+    timeZone = jsonData.timezone
     // return jsonData
     filterByDate(currentDate(), jsonData)
     weekly(jsonData)
@@ -381,7 +383,7 @@ function displaysFiltered(filteredData) {
 
     }
     document.getElementById("location").style = "display: flex; justify-content: center; align-items: center;"
-    document.getElementById("location").innerHTML = getInformationFromFrom()[0] +" (" + countryID + ")"
+    document.getElementById("location").innerHTML = getInformationFromFrom()[0] +" (" + countryID + ")" + " - " + timeZone
 
 }
 
