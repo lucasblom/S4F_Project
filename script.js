@@ -406,18 +406,18 @@ function weekly(data) {
         day = parseInt(day) + i
         month = parseInt(month)
         year = parseInt(year)
-        if (day > 31 && month == 1) { day = i; month = 2 }
-        if (day > 28 && month == 2) { day = i; month = 3 }
-        if (day > 31 && month == 3) { day = i; month = 4 }
-        if (day > 30 && month == 4) { day = i; month = 5 }
-        if (day > 31 && month == 5) { day = i; month = 6 }
-        if (day > 30 && month == 6) { day = i; month = 7 }
-        if (day > 31 && month == 7) { day = i; month = 8 }
-        if (day > 31 && month == 8) { day = i; month = 9 }
-        if (day > 30 && month == 9) { day = i; month = 10 }
-        if (day > 31 && month == 10) { day = i; month = 11 }
-        if (day > 30 && month == 11) { day = i; month = 12 }
-        if (day > 31 && month == 12) { day = i; month = 1; year++ }
+        if (day > 31 && month == 1) { day = 7-i; month = 2 }
+        if (day > 28 && month == 2) { day = 7-i; month = 3 }
+        if (day > 31 && month == 3) { day = 7-i; month = 4 }
+        if (day > 30 && month == 4) { day = 7-i; month = 5 }
+        if (day > 31 && month == 5) { day = 7-i; month = 6 }
+        if (day > 30 && month == 6) { day = 7-i; month = 7 }
+        if (day > 31 && month == 7) { day = 7-i; month = 8 }
+        if (day > 31 && month == 8) { day = 7-i; month = 9 }
+        if (day > 30 && month == 9) { day = 7-i; month = 10 }
+        if (day > 31 && month == 10) { day = 7-i; month = 11 }
+        if (day > 30 && month == 11) { day = 7-i; month = 12 }
+        if (day > 31 && month == 12) { day = 7-i; month = 1; year++ }
 
         if (day < 10) {
             day = "0" + day
